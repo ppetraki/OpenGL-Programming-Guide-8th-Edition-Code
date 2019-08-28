@@ -1,6 +1,5 @@
 #include "vbm.h"
 #include "vgl.h"
-#include "gettickcount.h"
 
 #include <stdio.h>
 #include <string.h>

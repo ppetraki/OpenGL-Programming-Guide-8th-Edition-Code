@@ -12,7 +12,6 @@
 
 #include "vbm.h"
 
-#include "gettickcount.h"
 
 #include <stdio.h>
 

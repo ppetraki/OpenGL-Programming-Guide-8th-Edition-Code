@@ -4,7 +4,6 @@
 #include "vgl.h"
 #include "LoadShaders.h"
 #include "vmath.h"
-#include "gettickcount.h"
 
 using namespace std;
 

@@ -9,18 +9,17 @@ project('vermilion8',
 add_global_arguments('-D_LINUX',language : 'c')
 add_global_arguments('-D_LINUX',language : 'cpp')
 
-cpp_flags = [] #['-Wfatal-errors']
+cc_flags   = []
+cpp_flags  = [] #['-Wfatal-errors']
 link_flags = []
 
 cc = meson.get_compiler('c')
-add_project_arguments(cc.get_supported_arguments(cpp_flags), language : 'c')
+add_project_arguments(cc.get_supported_arguments(cc_flags), language : 'c')
 add_project_link_arguments(cc.get_supported_link_arguments(link_flags), language : 'c')
 
 cpp = meson.get_compiler('cpp')
 add_project_arguments(cpp.get_supported_arguments(cpp_flags), language : 'cpp')
 add_project_link_arguments(cpp.get_supported_link_arguments(link_flags), language : 'cpp')
-
-include_dirs = include_directories('include')
 
 opengl_dep  = dependency('gl')
 glfw_dep    = dependency('glfw3')
@@ -28,22 +27,36 @@ glut_dep    = cpp.find_library('glut')
 rt_dep      = cpp.find_library('rt')
 dlopen_dep  = cpp.find_library('dl')
 
-common_deps = [opengl_dep, glfw_dep, glut_dep, rt_dep, dlopen_dep]
+common_dep = [opengl_dep, glfw_dep, glut_dep, rt_dep, dlopen_dep]
 
-vermilion_sources = files('''
+linuxcompat_lib = static_library('linux_compat',
+  ['linuxcompat/gettickcount.cpp', 'linuxcompat/sleep.cpp',],
+  include_directories: include_directories('linuxcompat/include')
+  )
+
+linuxcompat_dep = declare_dependency(
+  link_with: linuxcompat_lib,
+  include_directories: include_directories('linuxcompat/include')
+  )
+
+vermilion_lib = static_library('vermilion',
+  '''
   lib/vbm.cpp
   lib/targa.cpp
   lib/glew.c
   lib/LoadShaders.cpp
-  lib/gettickcount.cpp
   vermilion/vermilion/vdds.cpp
   vermilion/vermilion/loadtexture.cpp
-  '''.split())
+  '''.split(),
+  dependencies: [linuxcompat_dep, common_dep],
+  include_directories: include_directories('include'),
+  )
 
-vermilion_lib = both_libraries('vermilion',
-  vermilion_sources,
-  include_directories: include_dirs,
-  dependencies: common_deps)
+vermilion_dep = declare_dependency(
+  link_with: vermilion_lib,
+  dependencies: [linuxcompat_dep],
+  include_directories: include_directories('include'),
+  )
 
 example_sources = [
 'Chapter01-OG/Triangle/Triangle.cpp',
@@ -132,16 +145,12 @@ example_sources = [
 ]
 
 foreach example_file: example_sources
-  # mangle a unique target by combining the filename and it's parent directory
-  # XXX detect spaces in dirname and join them. Even though ninja can handle it
-  # who wants to deal with spaces in a build target?
+  # mangle a unique target by combining the filename and it's parent directory with '-'
   dir_name = (example_file.split('/')[-2])
   executable_name = dir_name + '-' + (example_file.split('/')[-1]).split('.')[0]
   executable(executable_name,
     example_file,
-    include_directories: include_dirs,
-    dependencies: common_deps,
-    link_with: [vermilion_lib],
+    dependencies: [common_dep, vermilion_dep]
     )
 endforeach
 
@@ -152,9 +161,7 @@ executable(
     'Chapter03-OG/ch03_instancing/ch03_instancing.cpp',
     'Chapter03-OG/ch03_instancing/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -163,9 +170,7 @@ executable(
     'Chapter03-OG/ch03_instancing2/ch03_instancing2.cpp',
     'Chapter03-OG/ch03_instancing2/vbm.cpp'
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -174,9 +179,7 @@ executable(
     'Chapter03-OG/ch03_instancing3/ch03_instancing3.cpp',
     'Chapter03-OG/ch03_instancing3/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -185,9 +188,7 @@ executable(
     'Chapter03-OG/ch03_xfb/ch03_xfb.cpp',
     'Chapter03-OG/ch03_xfb/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -196,9 +197,7 @@ executable(
     'Chapter04-OG/ch04_shadowmap/ch04_shadowmap.cpp',
     'Chapter04-OG/ch04_shadowmap/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -207,9 +206,7 @@ executable(
     'Chapter05-OG/ch05_xfb/ch05_xfb.cpp',
     'Chapter05-OG/ch05_xfb/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -218,9 +215,7 @@ executable(
     'Chapter07-OG/ch07_shadowmap/ch07_shadowmap.cpp',
     'Chapter07-OG/ch07_shadowmap/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -229,9 +224,7 @@ executable(
     'Chapter10-OG/10.6-01FourViewport/FourViewport.cpp',
     'Chapter10-OG/10.6-01FourViewport/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -240,9 +233,7 @@ executable(
     'Chapter10-OG/10.6.2LayerRender/LayerRender.cpp',
     'Chapter10-OG/10.6.2LayerRender/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -251,9 +242,7 @@ executable(
     'Chapter10-OG/ch10_draw_xfb/ch10_draw_xfb.cpp',
     'Chapter10-OG/ch10_draw_xfb/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -262,9 +251,7 @@ executable(
     'Chapter10-OG/ch10_fur/ch10_fur.cpp',
     'Chapter10-OG/ch10_fur/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
 
 executable(
@@ -273,8 +260,5 @@ executable(
     'Chapter10-OG/ch10_viewport_array/ch10_viewport_array.cpp',
     'Chapter10-OG/ch10_viewport_array/vbm.cpp',
   ],
-  include_directories: include_dirs,
-  dependencies: common_deps,
-  link_with: [vermilion_lib],
+  dependencies: [common_dep, vermilion_dep],
   )
-

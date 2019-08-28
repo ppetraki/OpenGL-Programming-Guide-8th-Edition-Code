@@ -1,5 +1,8 @@
 #ifndef _WIN32
-#include "gettickcount.h"
+#include "linuxcompat/linuxcompat.h"
+
+#include <sys/time.h>
+#include <cstddef>
 
 unsigned long GetTickCount()
 {

@@ -2,7 +2,6 @@
 #include "vmath.h"
 #include "LoadShaders.h"
 #include <iostream>
-#include "gettickcount.h"
 using namespace std;
 
 float Vertices[] = {
