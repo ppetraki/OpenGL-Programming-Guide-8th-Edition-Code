@@ -2,6 +2,7 @@
 #include "vmath.h"
 #include "LoadShaders.h"
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 float Vertices[] = {
