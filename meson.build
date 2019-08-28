@@ -155,7 +155,7 @@ foreach example_file: example_sources
 endforeach
 
 # these examples insist on using their own vbm class
-example_vbm_sources = [
+custom_vbm_sources = [
   [
     'Chapter03-OG/ch03_instancing/ch03_instancing.cpp',
     'Chapter03-OG/ch03_instancing/vbm.cpp',
@@ -206,13 +206,45 @@ example_vbm_sources = [
   ]
 ]
 
-foreach example_vbm_project: example_vbm_sources
+foreach custom_vbm_project: custom_vbm_sources
   # mangle a unique target by combining the filename and it's parent directory with '-'
-  example_file = example_vbm_project[0]
+  example_file = custom_vbm_project[0]
   dir_name = (example_file.split('/')[-2])
   executable_name = dir_name + '-' + (example_file.split('/')[-1]).split('.')[0]
   executable(executable_name,
-    example_vbm_project,
+    custom_vbm_project,
+    dependencies: [common_dep, vermilion_dep]
+    )
+endforeach
+
+testvbm_sources = [
+  ['TestVBM/teapot/teapot.cpp'],
+
+  [
+  'TestVBM/TestVBM/TestVBM.cpp',
+  'TestVBM/TestVBM/vbm.h',
+  'TestVBM/TestVBM/vbm.cpp'
+  ],
+
+  ['TestVBM/TestVBM2/TestVBM2.cpp'],
+
+  ['TestVBM/VBMTexture/TestVBM2.cpp'],
+
+  [
+    'TestVBM/VBM1Texture/VBM1Texture.cpp',
+    'TestVBM/VBM1Texture/vbm.h',
+    'TestVBM/VBM1Texture/vbm.cpp'
+  ]
+]
+
+foreach custom_vbm_project: testvbm_sources
+  # mangle a unique target by combining the filename and it's parent directory with '-'
+  example_file = custom_vbm_project[0]
+  dir_name = (example_file.split('/')[-2])
+  root_name = (example_file.split('/')[-3])
+  executable_name = root_name + '-' + dir_name + '-' + (example_file.split('/')[-1]).split('.')[0]
+  executable(executable_name,
+    custom_vbm_project,
     dependencies: [common_dep, vermilion_dep]
     )
 endforeach
