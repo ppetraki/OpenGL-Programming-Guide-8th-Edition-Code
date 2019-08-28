@@ -1,7 +1,7 @@
 project('vermilion8',
     'c', 'cpp',
     version : '8.0.0',
-    #    default_options : ['warning_level=1',  'c_std=c11', 'cpp_std=c++11']
+    #    default_options : ['warning_level=3',  'c_std=c11', 'cpp_std=c++11']
         default_options : ['c_std=c11', 'cpp_std=c++11']
     )
 
@@ -52,6 +52,8 @@ example_sources = [
 'Chapter03-OG/3.5_EasyMultiInstancing/MultiDraw.cpp',
 'Chapter03-OG/ch03_drawcommands/ch03_drawcommands.cpp',
 'Chapter03-OG/MultiBuffer/MultiBuffer.cpp',
+'Chapter03-OG/ch03_pointsprites/ch03_pointsprites.cpp',
+'Chapter03-OG/ch03_primitive_restart/ch03_primitive_restart.cpp',
 'Chapter04-OG/4.5.11 LogicOpTest/LogicOpTest.cpp',
 'Chapter04-OG/4.5.12 QueryTest/4.5.12QueryTest.cpp',
 'Chapter04-OG/4.5.13 ConditinalRender/4.5.13ConditinalRender.cpp',
@@ -134,7 +136,7 @@ foreach example_file: example_sources
   # XXX detect spaces in dirname and join them. Even though ninja can handle it
   # who wants to deal with spaces in a build target?
   dir_name = (example_file.split('/')[-2])
-  executable_name = dir_name + '_' + (example_file.split('/')[-1]).split('.')[0]
+  executable_name = dir_name + '-' + (example_file.split('/')[-1]).split('.')[0]
   executable(executable_name,
     example_file,
     include_directories: include_dirs,
@@ -142,3 +144,137 @@ foreach example_file: example_sources
     link_with: [vermilion_lib],
     )
 endforeach
+
+# these examples insist on using their own vbm class
+executable(
+  'ch03_instancing-ch03_instancing',
+  [
+    'Chapter03-OG/ch03_instancing/ch03_instancing.cpp',
+    'Chapter03-OG/ch03_instancing/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch03_instancing2-ch03_instancing2',
+  [
+    'Chapter03-OG/ch03_instancing2/ch03_instancing2.cpp',
+    'Chapter03-OG/ch03_instancing2/vbm.cpp'
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch03_instancing3-ch03_instancing3',
+  [
+    'Chapter03-OG/ch03_instancing3/ch03_instancing3.cpp',
+    'Chapter03-OG/ch03_instancing3/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch03_xfb-ch03_xfb',
+  [
+    'Chapter03-OG/ch03_xfb/ch03_xfb.cpp',
+    'Chapter03-OG/ch03_xfb/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch04_shadowmap-ch04_shadowmap',
+  [
+    'Chapter04-OG/ch04_shadowmap/ch04_shadowmap.cpp',
+    'Chapter04-OG/ch04_shadowmap/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch05_xfb-ch05_xfb',
+  [
+    'Chapter05-OG/ch05_xfb/ch05_xfb.cpp',
+    'Chapter05-OG/ch05_xfb/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch07_shadowmap-ch07_shadowmap',
+  [
+    'Chapter07-OG/ch07_shadowmap/ch07_shadowmap.cpp',
+    'Chapter07-OG/ch07_shadowmap/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  '10.6-01FourViewport-FourViewport',
+  [
+    'Chapter10-OG/10.6-01FourViewport/FourViewport.cpp',
+    'Chapter10-OG/10.6-01FourViewport/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  '10.6.2LayerRender-LayerRender',
+  [
+    'Chapter10-OG/10.6.2LayerRender/LayerRender.cpp',
+    'Chapter10-OG/10.6.2LayerRender/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch10_draw_xfb-ch10_draw_xfb',
+  [
+    'Chapter10-OG/ch10_draw_xfb/ch10_draw_xfb.cpp',
+    'Chapter10-OG/ch10_draw_xfb/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch10_fur-ch10_fur',
+  [
+    'Chapter10-OG/ch10_fur/ch10_fur.cpp',
+    'Chapter10-OG/ch10_fur/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
+executable(
+  'ch10_viewport_array-ch10_viewport_array',
+  [
+    'Chapter10-OG/ch10_viewport_array/ch10_viewport_array.cpp',
+    'Chapter10-OG/ch10_viewport_array/vbm.cpp',
+  ],
+  include_directories: include_dirs,
+  dependencies: common_deps,
+  link_with: [vermilion_lib],
+  )
+
