@@ -2,13 +2,20 @@
 
 Forked from [https://github.com/Kylewlk/OpenGL-Programming-Guide-8th-Edition-Code](https://github.com/Kylewlk/OpenGL-Programming-Guide-8th-Edition-Code)        
 
-This is a work in progress. Everything is being ported to mesonbuild. Everything current builds, however several executables fail to run because they cannot locate resource files relative to their execution path.
+This is a work in progress. Everything is being ported to [meson](http://www.mesonbuild.com). Everything current builds, however several executables fail to run because they cannot locate resource files relative to their execution path.
 
+Missing functions Sleep and GetTickCounts are implemented in a local lib and conditionally compiled into libvermilion
 
-Missing functions Sleep and GetTickCounts are implemented in a local lib and conditionally compiled into libvermilion ifndef _WIN32
+Tested on Ubuntu 16.04 and Ubuntu 18.04
+
+Many of the examples requires a graphics card capable of OpenGL Version 4.3 or higher
+
+    glxinfo | grep 'OpenGL version'
+    OpenGL version string: 4.4.0 NVIDIA 21.5
 
 # Getting started
     pip3 install meson
+    # install ninja >= 1.5
     make # drives mesonbuild
 
 # TODO
