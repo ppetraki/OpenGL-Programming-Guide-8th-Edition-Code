@@ -10,6 +10,7 @@
 #include "vbm.h"
 #include "LoadShaders.h"
 #include "vmath.h"
+#include "gettickcount.h"
 
 #include <stdio.h>
 

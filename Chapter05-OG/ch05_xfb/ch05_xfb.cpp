@@ -12,6 +12,8 @@
 
 #include "vbm.h"
 
+#include "gettickcount.h"
+
 #include <stdio.h>
 
 BEGIN_APP_DECLARATION(TransformFeedbackExample)

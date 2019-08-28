@@ -1,4 +1,4 @@
-all:
+all: mrproper bootstrap
 	ninja -C build/
 
 clean:

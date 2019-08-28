@@ -10,6 +10,11 @@
 
 #include <GL/freeglut.h>
 
+// Ugly I know but this is just example code and it frankly
+// should have built correctly the first time.
+#include <unistd.h>
+#define Sleep(A) usleep(A)
+
 //#  ifdef _DEBUG
 //#     pragma comment (lib, "freeglut_staticd.lib")
 //#  else

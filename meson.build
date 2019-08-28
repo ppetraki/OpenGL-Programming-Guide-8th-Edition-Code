@@ -1,37 +1,16 @@
 project('vermilion8',
     'c', 'cpp',
     version : '8.0.0',
-    default_options : ['warning_level=3',  'c_std=c11', 'cpp_std=c++11']
+    #    default_options : ['warning_level=1',  'c_std=c11', 'cpp_std=c++11']
+        default_options : ['c_std=c11', 'cpp_std=c++11']
     )
 
 # XXX detect OS
 add_global_arguments('-D_LINUX',language : 'c')
 add_global_arguments('-D_LINUX',language : 'cpp')
 
-cpp_flags = [
-   '-O3',
-   '-Wall',
-   '-Wextra',
-   '-Wshadow',
-   '-Wnon-virtual-dtor',
-   '-Wold-style-cast',
-   '-Wcast-align',
-   '-Wunused',
-   '-Woverloaded-virtual',
-   '-Wpedantic',
-   '-Wconversion',
-   '-Wsign-conversion',
-   '-Wmisleading-indentation',
-   '-Wduplicated-cond',
-   '-Wduplicated-branches',
-   '-Wlogical-op',
-   '-Wnull-dereference',
-   '-Wuseless-cast',
-   '-Wdouble-promotion',
-   '-Wformat=2'
-]
-
-link_flags = ['-flto']
+cpp_flags = [] #['-Wfatal-errors']
+link_flags = []
 
 cc = meson.get_compiler('c')
 add_project_arguments(cc.get_supported_arguments(cpp_flags), language : 'c')
@@ -45,16 +24,21 @@ include_dirs = include_directories('include')
 
 opengl_dep  = dependency('gl')
 glfw_dep    = dependency('glfw3')
-gl_dep      = dependency('GL')
+glut_dep    = cpp.find_library('glut')
 rt_dep      = cpp.find_library('rt')
 dlopen_dep  = cpp.find_library('dl')
 
-common_deps = [opengl_dep, glfw_dep, gl_dep, rt_dep, dlopen_dep]
+common_deps = [opengl_dep, glfw_dep, glut_dep, rt_dep, dlopen_dep]
 
 vermilion_sources = files('''
+  lib/vbm.cpp
   lib/targa.cpp
   lib/glew.c
-  lib/LoadShaders.cpp'''.split())
+  lib/LoadShaders.cpp
+  lib/gettickcount.cpp
+  vermilion/vermilion/vdds.cpp
+  vermilion/vermilion/loadtexture.cpp
+  '''.split())
 
 vermilion_lib = both_libraries('vermilion',
   vermilion_sources,
@@ -67,16 +51,6 @@ example_sources = [
 'Chapter03-OG/3.4_DrawIndirect/DrawIndirect.cpp',
 'Chapter03-OG/3.5_EasyMultiInstancing/MultiDraw.cpp',
 'Chapter03-OG/ch03_drawcommands/ch03_drawcommands.cpp',
-'Chapter03-OG/ch03_instancing2/ch03_instancing2.cpp',
-'Chapter03-OG/ch03_instancing2/vbm.cpp',
-'Chapter03-OG/ch03_instancing3/ch03_instancing3.cpp',
-'Chapter03-OG/ch03_instancing3/vbm.cpp',
-'Chapter03-OG/ch03_instancing/ch03_instancing.cpp',
-'Chapter03-OG/ch03_instancing/vbm.cpp',
-'Chapter03-OG/ch03_pointsprites/ch03_pointsprites.cpp',
-'Chapter03-OG/ch03_primitive_restart/ch03_primitive_restart.cpp',
-'Chapter03-OG/ch03_xfb/ch03_xfb.cpp',
-'Chapter03-OG/ch03_xfb/vbm.cpp',
 'Chapter03-OG/MultiBuffer/MultiBuffer.cpp',
 'Chapter04-OG/4.5.11 LogicOpTest/LogicOpTest.cpp',
 'Chapter04-OG/4.5.12 QueryTest/4.5.12QueryTest.cpp',
@@ -86,16 +60,12 @@ example_sources = [
 'Chapter04-OG/4.5.6 BlendTest/BlendTest.cpp',
 'Chapter04-OG/4.6 Smooth/4.6Smooth.cpp',
 'Chapter04-OG/4.7 FrameBuffer/4.7FrameBuffer.cpp',
-'Chapter04-OG/ch04_shadowmap/ch04_shadowmap.cpp',
-'Chapter04-OG/ch04_shadowmap/vbm.cpp',
 'Chapter04-OG/gouraud-float/gouraud-float.cpp',
 'Chapter04-OG/Gouraud/gouraud.cpp',
 'Chapter04-OG/VertexColor/VertexColor.cpp',
 'Chapter05-OG/5.3.1ClipDistance/5.3.1ClipDistance.cpp',
 'Chapter05-OG/5.4TransformFeedback2/5.4TransformFeedback2.cpp',
 'Chapter05-OG/5.4TransformFeedback/5.4TransformFeedback.cpp',
-'Chapter05-OG/ch05_xfb/ch05_xfb.cpp',
-'Chapter05-OG/ch05_xfb/vbm.cpp',
 'Chapter06-OG/6.13PointSprite/PointSprite.cpp',
 'Chapter06-OG/6.14FrameTex/FrameTex.cpp',
 'Chapter06-OG/6.5SetTexData/6.5SetTexData.cpp',
@@ -122,8 +92,6 @@ example_sources = [
 'Chapter07-OG/7.4Shadow-test02-LightTexMap/7.4Shadow-LightTexMap.cpp',
 'Chapter07-OG/7.4Shadow-test03-LightDepthTex/test.cpp',
 'Chapter07-OG/7.4Shadow-test04-NoTextureporj/7.4Shadow.cpp',
-'Chapter07-OG/ch07_shadowmap/ch07_shadowmap.cpp',
-'Chapter07-OG/ch07_shadowmap/vbm.cpp',
 'Chapter08-OG/8.1.1BrickColor-Ball/BrickTex.cpp',
 'Chapter08-OG/8.1.1BrickColor/BrickSquare.cpp',
 'Chapter08-OG/8.1.1Stripe/stripeTex.cpp',
@@ -149,16 +117,6 @@ example_sources = [
 'Chapter09-OG/teapot/teapot.cpp',
 'Chapter10-OG/10.3.1-01Tetrahedron/Tetrahedron.cpp',
 'Chapter10-OG/10.4-01TransformFeedback/TransformTriangle.cpp',
-'Chapter10-OG/10.6-01FourViewport/FourViewport.cpp',
-'Chapter10-OG/10.6-01FourViewport/vbm.cpp',
-'Chapter10-OG/10.6.2LayerRender/LayerRender.cpp',
-'Chapter10-OG/10.6.2LayerRender/vbm.cpp',
-'Chapter10-OG/ch10_draw_xfb/ch10_draw_xfb.cpp',
-'Chapter10-OG/ch10_draw_xfb/vbm.cpp',
-'Chapter10-OG/ch10_fur/ch10_fur.cpp',
-'Chapter10-OG/ch10_fur/vbm.cpp',
-'Chapter10-OG/ch10_viewport_array/ch10_viewport_array.cpp',
-'Chapter10-OG/ch10_viewport_array/vbm.cpp',
 'Chapter11-OG/11.1-01ImageTex/ImageTex.cpp',
 'Chapter11-OG/11.2-01BufferObject/BufferObject.cpp',
 'Chapter11-OG/ch11_doublewrite/ch11_doublewrite.cpp',
@@ -177,11 +135,10 @@ foreach example_file: example_sources
   # who wants to deal with spaces in a build target?
   dir_name = (example_file.split('/')[-2])
   executable_name = dir_name + '_' + (example_file.split('/')[-1]).split('.')[0]
-  exe = executable(executable_name,
+  executable(executable_name,
     example_file,
     include_directories: include_dirs,
     dependencies: common_deps,
     link_with: [vermilion_lib],
     )
-  test(executable_name, exe)
 endforeach

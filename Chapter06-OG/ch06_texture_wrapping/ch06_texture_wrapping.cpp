@@ -14,6 +14,7 @@
 #include "vbm.h"
 
 #include "vmath.h"
+#include "gettickcount.h"
 
 #include <stdio.h>
 

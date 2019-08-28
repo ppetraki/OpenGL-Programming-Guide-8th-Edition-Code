@@ -3,6 +3,7 @@
 #include "vmath.h"
 #include "LoadShaders.h"
 #include "vbm.h"
+#include "gettickcount.h"
 #include <iostream>
 using namespace std;
 

@@ -4,7 +4,11 @@
 #include "vmath.h"
 #include "LoadShaders.h"
 #include "vbm.h"
+#include "gettickcount.h"
 #include <iostream>
+
+#include <string.h>
+
 using namespace std;
 
 GLuint program;

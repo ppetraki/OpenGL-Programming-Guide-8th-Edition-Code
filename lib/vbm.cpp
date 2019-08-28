@@ -1,7 +1,9 @@
 #include "vbm.h"
 #include "vgl.h"
+#include "gettickcount.h"
 
 #include <stdio.h>
+#include <string.h>
 
 VBObject::VBObject(void)
     : m_vao(0),

@@ -11,6 +11,7 @@ $Id$
 #include "vmath.h"
 
 #include "LoadShaders.h"
+#include "gettickcount.h"
 
 #include <stdio.h>
 

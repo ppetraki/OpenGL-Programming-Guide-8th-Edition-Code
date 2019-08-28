@@ -11,6 +11,7 @@
 #include "vapp.h"
 #include "vutils.h"
 #include "vbm.h"
+#include "gettickcount.h"
 
 #include "vmath.h"
 

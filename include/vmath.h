@@ -639,21 +639,6 @@ static inline mat4 perspective(float fovy /* in degrees */, float aspect, float 
 }
 
 template <typename T>
-static inline Tmat4<T> lookat(vecN<T,3> eye, vecN<T,3> center, vecN<T,3> up)
-{
-    const Tvec3<T> f = normalize(center - eye);
-    const Tvec3<T> upN = normalize(up);
-    const Tvec3<T> s = cross(f, upN);
-    const Tvec3<T> u = cross(s, f);
-    const Tmat4<T> M = Tmat4<T>(Tvec4<T>(s[0], u[0], -f[0], T(0)),
-                                Tvec4<T>(s[1], u[1], -f[1], T(0)),
-                                Tvec4<T>(s[2], u[2], -f[2], T(0)),
-                                Tvec4<T>(T(0), T(0), T(0), T(1)));
-
-    return M * translate<T>(-eye);
-}
-
-template <typename T>
 static inline Tmat4<T> translate(T x, T y, T z)
 {
     return Tmat4<T>(Tvec4<T>(1.0f, 0.0f, 0.0f, 0.0f),
@@ -675,6 +660,21 @@ static inline Tmat4<T> scale(T x, T y, T z)
                     Tvec4<T>(0.0f, y, 0.0f, 0.0f),
                     Tvec4<T>(0.0f, 0.0f, z, 0.0f),
                     Tvec4<T>(0.0f, 0.0f, 0.0f, 1.0f));
+}
+
+template <typename T>
+static inline Tmat4<T> lookat(vecN<T,3> eye, vecN<T,3> center, vecN<T,3> up)
+{
+    const Tvec3<T> f = normalize(center - eye);
+    const Tvec3<T> upN = normalize(up);
+    const Tvec3<T> s = cross(f, upN);
+    const Tvec3<T> u = cross(s, f);
+    const Tmat4<T> M = Tmat4<T>(Tvec4<T>(s[0], u[0], -f[0], T(0)),
+                                Tvec4<T>(s[1], u[1], -f[1], T(0)),
+                                Tvec4<T>(s[2], u[2], -f[2], T(0)),
+                                Tvec4<T>(T(0), T(0), T(0), T(1)));
+
+    return M * translate<T>(-eye);
 }
 
 template <typename T>

@@ -2,6 +2,7 @@
 #include "vgl.h"
 
 #include <stdio.h>
+#include <string.h>
 
 VBObject::VBObject(void)
     : m_vao(0),

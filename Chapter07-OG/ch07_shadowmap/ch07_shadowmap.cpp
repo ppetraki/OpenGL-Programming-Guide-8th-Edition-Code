@@ -12,8 +12,10 @@ $Id$
 
 #include "vbm.h"
 #include "LoadShaders.h"
+#include "gettickcount.h"
 
 #include <stdio.h>
+#include <string.h>
 
 using namespace vmath;
 
